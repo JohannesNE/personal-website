@@ -1,0 +1,26 @@
+project:
+  type: website
+  post-render:
+    # Copy static/ to rendered folder
+    - "cp -rnv static/. _site/"
+
+website:
+  title: "Johannes Enevoldsen"
+  site-url: https://jenevoldsen.com
+  favicon: "images/favicon/apple-touch-icon.png"
+  navbar:
+    right:
+      - projects.qmd
+      - icon: github
+        href: https://github.com/JohannesNE/
+        # Set icons using iconify https://github.com/mcanouil/quarto-iconify
+      - text: "{{< iconify ri:bluesky-fill >}}" 
+        href: https://bsky.app/profile/johsenevoldsen.bsky.social
+      - text: "{{< iconify fa-brands:orcid >}}"
+        url: https://orcid.org/0000-0002-9190-6566/
+format:
+  html:
+    theme: litera
+    css: styles.css
+
+

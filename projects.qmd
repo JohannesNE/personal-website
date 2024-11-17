@@ -1,0 +1,7 @@
+---
+title: Projects
+---
+
+[**Literature Clock** - A clock based on excerpts from books](https://literature-clock.jenevoldsen.com)
+
+[**Melanoma** - A web app to train melanoma identification](https://melanoma.jenevoldsen.com)
