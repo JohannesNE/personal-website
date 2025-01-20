@@ -7,6 +7,7 @@ project:
 website:
   title: "Johannes Enevoldsen"
   site-url: https://jenevoldsen.com
+  description: "This is Johannes Enevoldsen's personal page"
   favicon: "images/favicon/apple-touch-icon.png"
   navbar:
     right:

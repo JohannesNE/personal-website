@@ -1,0 +1,15 @@
+---
+title: 'Excitable cells'
+date: '2025-01-17'
+categories: ['physiology']
+description: 'something.'
+execute: 
+  message: false
+  warning: false
+editor_options: 
+  chunk_output_type: console
+include-after-body:
+  text: <script type="application/javascript" src=script.js></script>
+---
+
+<canvas id="sim1" width="600" height="600"></canvas>
