@@ -8,6 +8,9 @@ class Simulation {
         this.rows = Math.floor(this.canvas.height / this.resolution);
         this.resolution = this.canvas.width / this.cols;
 
+        this.fps = options.fps || 20;
+        this.steps_pr_frame = options.steps_pr_frame || 5;
+
         // Cell settings
         this.refractoryTime = options.meanRefractoryTime || 100;
 
@@ -138,21 +141,21 @@ class Simulation {
         const { state, time, refractoryTime, dead } = this.cellData;
 
         if (dead[idx]) {
-            return [150, 60, 31]; // #963C1F in RGB
+            return [177, 75, 50]; // #b14b32 in RGB
         }
 
         switch (state[idx]) {
             case 0: // Resting state
-                return [220, 220, 220];
+                return [230, 230, 230];
             case 1: // Excited state
                 return [50, 50, 50];
             case 2: { // Refractory state
                 const refractoryProgress = (refractoryTime[idx] - time[idx] + 1) / refractoryTime[idx];
-                const mappedColor = Math.floor(200 - (refractoryProgress * 100));
+                const mappedColor = Math.floor(230 - (refractoryProgress * 180));
                 return [mappedColor, mappedColor, mappedColor];
             }
             default:
-                return [220, 220, 220];
+                return [230, 230, 230];
         }
     }
 
@@ -193,10 +196,8 @@ class Simulation {
     }
 
     animate() {
-        const fps = 20;
-        const speed = 5;
 
-        for (let i = 0; i < speed; i++) {
+        for (let i = 0; i < this.steps_pr_frame; i++) {
             this.step();
         }
 
@@ -205,7 +206,7 @@ class Simulation {
         // Throttle animation from usual 60 fps to lower.
         setTimeout(() => {
             requestAnimationFrame(() => this.animate());
-        }, 1000 / fps);
+        }, 1000 / this.fps);
 
     }
 
@@ -232,8 +233,10 @@ class Simulation {
 
         if (this.isValidPosition(i, j)) {
             const idx = this.getCellIndex(i, j);
-            this.cellData.active[idx] = 1;
-            this.cellData.time[idx] = 0;
+            if (this.cellData.state[idx] === 0 && this.cellData.dead[idx] === 0) {
+                this.cellData.active[idx] = 1;
+                this.cellData.time[idx] = 0;
+            }
         }
     }
 
@@ -260,6 +263,13 @@ function gaussianRandom(mean = 0, stdev = 1, min = -Infinity) {
         return gaussianRandom(mean, stdev, min);
     }
 }
+
+// Tiny simulation
+let sim_tiny = new Simulation("sim_tiny", 
+    { resolution: 50, fps: 5, steps_pr_frame: 1, meanRefractoryTime: 30});
+sim_tiny.drawAll();
+sim_tiny.animate();
+
 
 // Initialize simulation
 let sim1 = new Simulation("sim1", { resolution: 15 });

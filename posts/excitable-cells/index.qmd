@@ -1,8 +1,8 @@
 ---
 title: 'Excitable cells'
-date: '2025-01-17'
-categories: ['physiology']
-description: 'something.'
+#date: '2025-01-17'
+#categories: ['physiology']
+description: 'A demonstration of how reentry tachyarrythmias can develop in a system of excitable cells (e.g. cardiomyocytes).'
 execute: 
   message: false
   warning: false
@@ -11,5 +11,27 @@ editor_options:
 include-after-body:
   text: <script type="application/javascript" src=script.js></script>
 ---
+
+Heart muscle cells (cardiomyocytes) have some interesting properties. When they are activated, they [depolarize](https://en.wikipedia.org/wiki/Depolarization). Depolarization causes the cell to contract, but also activates neighboring cells.
+
+The following is a grid of simulated cardiomyocytes. They are all in a *resting state*, ready to be *activated*. 
+
+> 💡 Click/tap somewhere in the box below to activate a cell.
+
+<canvas id="sim_tiny" width="600" height="400"></canvas>
+
+Activated cells are black. After a short moment, they become inactive and *refractory*. Refractory cells cannot be activated. In the simulation, refractory cells go from dark gray to light gray, until they have regained their resting state, and are ready for a new activation.
+
+Notice, that the activation is not entirely symmetric and predictable. The give the simulation a more organic feel, I added a bit of randomness to the activation of cells. Each cell is activated with a higher probability the more of its four neighbors are active (33% chance if one neighbor is active. 100% change of 3 or 4 neighbors are active).
+
+## Pacemaker cells
+
+Another interesting property of cardiomyocytes are their ability to 
+
+
+
+![An illustration of AV-nodal reentry tachycardia. From [ECGpedia.org](https://en.ecgpedia.org/wiki/AVNRT)](img/Re_entry.svg)
+
+I was never entirely sure how d
 
 <canvas id="sim1" width="600" height="600"></canvas>

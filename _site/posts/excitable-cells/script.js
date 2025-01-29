@@ -4,28 +4,59 @@ class Simulation {
         this.ctx = this.canvas.getContext('2d');
 
         this.resolution = options.resolution || 15;
-
         this.cols = Math.floor(this.canvas.width / this.resolution);
         this.rows = Math.floor(this.canvas.height / this.resolution);
-        this.resolution = this.canvas.width / this.cols
-        
+        this.resolution = this.canvas.width / this.cols;
+
+        this.fps = options.fps || 20;
+        this.steps_pr_frame = options.steps_pr_frame || 5;
+
+        // Cell settings
+        this.refractoryTime = options.meanRefractoryTime || 100;
+
+        this.setupImageData();
+        this.setupGrid();
         this.setupEventListeners();
+    }
 
-        // Initialize grid
-        this.grid = make2DArray(this.cols, this.rows);
+    setupGrid() {
+        const cellCount = this.cols * this.rows;
+        this.cellData = {
+            state: new Uint8Array(cellCount),
+            nextState: new Uint8Array(cellCount),
+            active: new Uint8Array(cellCount),
+            time: new Uint16Array(cellCount),
+            refractoryTime: new Uint16Array(cellCount).fill(this.refractoryTime),
+            exciteTime: new Uint8Array(cellCount).fill(10),
+            preexciteTime: new Uint8Array(cellCount).fill(0),
+            paceTime: new Uint8Array(cellCount).fill(0), // zero i no pacing (paceTime is infinite)
+            dead: new Uint8Array(cellCount)
+        };
+    }
 
-        for (let i = 0; i < this.cols; i++) {
-            for (let j = 0; j < this.rows; j++) {
-                this.grid[i][j] = new Cell(i, j);
+    setupImageData() {
+        // Create ImageData buffer
+        this.imageData = this.ctx.createImageData(this.canvas.width, this.canvas.height);
+        this.pixels = this.imageData.data;
+
+        // Precalculate pixel positions for each cell
+        this.pixelPositions = new Int32Array(this.cols * this.rows);
+        for (let j = 0; j < this.rows; j++) {
+            for (let i = 0; i < this.cols; i++) {
+                const cellIdx = this.getCellIndex(i, j);
+                this.pixelPositions[cellIdx] = ((j * this.resolution) * this.canvas.width + (i * this.resolution)) * 4;
             }
         }
 
-        // Initial setup
-        this.assignCircle(20, 25, 7.5, { dead: true });
-        this.assignCircle(30, 25, 4.5, { refractory_time: 200 });
-        this.assignCircle(35, 25, 4.5, { refractory_time: 200 });
+        // Create line offset array for resolution
+        this.lineOffsets = new Int32Array(this.resolution);
+        for (let y = 0; y < this.resolution; y++) {
+            this.lineOffsets[y] = y * this.canvas.width * 4;
+        }
+    }
 
-
+    getCellIndex(i, j) {
+        return i + j * this.cols;
     }
 
     getNeighbors(i, j) {
@@ -35,11 +66,11 @@ class Simulation {
                 const newI = i + di;
                 const newJ = j + dj;
                 if (this.isValidPosition(newI, newJ)) {
-                    return this.grid[newI][newJ];
+                    return this.getCellIndex(newI, newJ);
                 }
                 return null;
             })
-            .filter(cell => cell !== null);
+            .filter(idx => idx !== null);
     }
 
     isValidPosition(i, j) {
@@ -47,65 +78,148 @@ class Simulation {
     }
 
     step() {
-        //Update NextState
-        for (let i = 0; i < this.cols; i++) {
-            for (let j = 0; j < this.rows; j++) {
-                const neighbors = this.getNeighbors(i,j);
-                this.grid[i][j].updateNextState(neighbors);
-            }
-        }
+        const { state, nextState, active, time, refractoryTime, exciteTime, preexciteTime, paceTime, dead } = this.cellData;
+
+        nextState.set(state);
 
         for (let i = 0; i < this.cols; i++) {
             for (let j = 0; j < this.rows; j++) {
-                this.grid[i][j].applyNextState();
+                const idx = this.getCellIndex(i, j);
+
+                if (dead[idx]) continue;
+
+                if (active[idx] === 1) {
+                    if (time[idx] >= refractoryTime[idx]) {
+                        //time[idx] = 0;
+                        active[idx] = 0;
+                        nextState[idx] = 0;
+                    } else {
+                        if (time[idx] >= exciteTime[idx]) {
+                            nextState[idx] = 2;
+                        } else if (time[idx] >= preexciteTime[idx]) {
+                            nextState[idx] = 1;
+                        } else {
+                            nextState[idx] = 0;
+                        }
+                        time[idx]++;
+                    }
+                } else {
+                    // Resting cell
+                    if (paceTime[idx] > 0) {
+                        // Pacemaker cell
+                        if (time[idx] >= paceTime[idx]) {
+                            active[idx] = 1;
+                            time[idx] = 0;
+                            continue;
+                        } else {
+                            time[idx]++;
+                        }
+                    }
+
+                    // Check if neighbors are excited
+                    const neighbors = this.getNeighbors(i, j);
+                    let nExcited = 0;
+                    for (const neighborIdx of neighbors) {
+                        if (state[neighborIdx] === 1) {
+                            nExcited++;
+                        }
+                    }
+                    if (nExcited >= Math.floor(Math.random() * 3) + 1) {
+                        active[idx] = 1;
+                        time[idx] = 0;
+                    }
+
+
+                }
             }
         }
+
+        this.cellData.state.set(nextState);
     }
 
-    drawCell(cell) {
-        const refractoryProgress = (cell.refractory_time - cell.time + 1) / cell.refractory_time;
-        this.ctx.fillStyle = cell.getColor(refractoryProgress);
-        this.ctx.fillRect(
-            cell.i * this.resolution,
-            cell.j * this.resolution,
-            this.resolution,
-            this.resolution
-        );
+    getColor(idx) {
+        const { state, time, refractoryTime, dead } = this.cellData;
+
+        if (dead[idx]) {
+            return [177, 75, 50]; // #b14b32 in RGB
+        }
+
+        switch (state[idx]) {
+            case 0: // Resting state
+                return [230, 230, 230];
+            case 1: // Excited state
+                return [50, 50, 50];
+            case 2: { // Refractory state
+                const refractoryProgress = (refractoryTime[idx] - time[idx] + 1) / refractoryTime[idx];
+                const mappedColor = Math.floor(230 - (refractoryProgress * 180));
+                return [mappedColor, mappedColor, mappedColor];
+            }
+            default:
+                return [230, 230, 230];
+        }
     }
 
     drawAll() {
-        for (let i = 0; i < this.grid.length; i++) {
-            for (let j = 0; j < this.grid[0].length; j++) {
-                this.drawCell(this.grid[i][j]);
+        const pixels = this.pixels;
+        const resolution = this.resolution;
+        const width = this.canvas.width;
+        const lineOffsets = this.lineOffsets;
+
+        for (let idx = 0; idx < this.cols * this.rows; idx++) {
+            const [r, g, b] = this.getColor(idx);
+            const basePixelPos = this.pixelPositions[idx];
+
+            // Fill one row of pixels and copy it resolution times
+            for (let x = 0; x < resolution; x++) {
+                const pixelPos = basePixelPos + (x * 4);
+                pixels[pixelPos] = r;
+                pixels[pixelPos + 1] = g;
+                pixels[pixelPos + 2] = b;
+                pixels[pixelPos + 3] = 255;
+            }
+
+            // Copy the first row to all other rows
+            const firstRowStart = basePixelPos;
+            const rowLength = resolution * 4;
+            for (let y = 1; y < resolution; y++) {
+                const destPos = firstRowStart + lineOffsets[y];
+                for (let x = 0; x < rowLength; x += 4) {
+                    pixels[destPos + x] = pixels[firstRowStart + x];
+                    pixels[destPos + x + 1] = pixels[firstRowStart + x + 1];
+                    pixels[destPos + x + 2] = pixels[firstRowStart + x + 2];
+                    pixels[destPos + x + 3] = 255;
+                }
             }
         }
+
+        this.ctx.putImageData(this.imageData, 0, 0);
     }
 
-    // Animation loop
     animate() {
-        this.step();
-        this.step();
 
-        // Clear the canvas
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        // Update states
-        this.step();
-        
-        // Draw all cells
+        for (let i = 0; i < this.steps_pr_frame; i++) {
+            this.step();
+        }
+
         this.drawAll();
 
+        // Throttle animation from usual 60 fps to lower.
+        setTimeout(() => {
+            requestAnimationFrame(() => this.animate());
+        }, 1000 / this.fps);
 
-        requestAnimationFrame(() => this.animate());
     }
 
     assignCircle(centerI, centerJ, radius, prop) {
         for (let i = Math.floor(centerI - radius); i <= centerI + radius; i++) {
             for (let j = Math.floor(centerJ - radius); j <= centerJ + radius; j++) {
-                if (i >= 0 && i < this.cols && j >= 0 && j < this.rows) {
+                if (this.isValidPosition(i, j)) {
                     const distance = Math.hypot(centerI - i, centerJ - j);
                     if (distance <= radius) {
-                        Object.assign(this.grid[i][j], prop);
+                        const idx = this.getCellIndex(i, j);
+                        for (const [key, value] of Object.entries(prop)) {
+                            this.cellData[key][idx] = value;
+                        }
                     }
                 }
             }
@@ -114,105 +228,75 @@ class Simulation {
 
     handleClick(event) {
         const rect = this.canvas.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-        const i = Math.floor(x / this.resolution);
-        const j = Math.floor(y / this.resolution);
+        const i = Math.floor((event.clientX - rect.left) / this.resolution);
+        const j = Math.floor((event.clientY - rect.top) / this.resolution);
 
         if (this.isValidPosition(i, j)) {
-            this.grid[i][j].active = 1;
+            const idx = this.getCellIndex(i, j);
+            if (this.cellData.state[idx] === 0 && this.cellData.dead[idx] === 0) {
+                this.cellData.active[idx] = 1;
+                this.cellData.time[idx] = 0;
+            }
         }
     }
 
     setupEventListeners() {
         this.canvas.addEventListener('mousedown', (e) => this.handleClick(e));
     }
-
-
 }
 
-// Utility function to create 2D array
-function make2DArray(cols, rows) {
-    let arr = new Array(cols);
-    for (let i = 0; i < arr.length; i++) {
-        arr[i] = new Array(rows);
-    }
-    return arr;
-}
-
-class Cell {
-    constructor(i, j, options = {}) {
-        this.i = i;
-        this.j = j;
-        this.state = 0;
-        this.nextState = 0;
-        this.active = 0;
-        this.time = 0;
-        this.preexcite_time = options.preexcite_time || 0;
-        this.excite_time = options.excite_time || 10;
-        this.refractory_time = options.refractory_time || 100;
-        this.dead = options.dead || false;
-    }
-
-    updateNextState(neighbors) {
-        if (this.dead) return;
-
-        if (this.active === 1) {
-            if (this.time >= this.refractory_time) {
-                this.time = 0;
-                this.active = 0;
-                this.nextState = 0;
-            } else {
-                if (this.time >= this.excite_time) {
-                    this.nextState = 2;
-                } else if (this.time >= this.preexcite_time) {
-                    this.nextState = 1;
-                } else {
-                    this.nextState = 0;
-                }
-                this.time++;
-            }
-        } else {
-            if (this.checkNeighbors(neighbors)) {
-                this.active = 1;
-            }
-        }
-    }
-
-    applyNextState() {
-        this.state = this.nextState;
-    }
-
-    checkNeighbors(neighbors) {
-        let nExcited = 0;
-        for (const neighbor of neighbors) {
-            if (neighbor && neighbor.state === 1) {
-                nExcited++;
-            }
-        }
-        return nExcited >= Math.floor(Math.random() * 4) + 1;
-    }
-
-    getColor(refractoryProgress) {
-        if (this.dead) return "#963C1F";
-        
-        switch (this.state) {
-            case 0: return "rgb(220, 220, 220)";
-            case 1: return "rgb(50, 50, 50)";
-            case 2: {
-                const mappedColor = Math.floor(200 - (refractoryProgress * 100));
-                return `rgb(${mappedColor}, ${mappedColor}, ${mappedColor})`;
-            }
-            default: return "rgb(220, 220, 220)";
-        }
-    }
-}
-
-function map(value, start1, stop1, start2, stop2) {
+function mapValues(value, start1, stop1, start2, stop2) {
     return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
 }
 
-let sim1 = new Simulation("sim1");
+// Standard Normal variate using Box-Muller transform. (From https://stackoverflow.com/questions/25582882/javascript-math-random-normal-distribution-gaussian-bell-curve)
+function gaussianRandom(mean = 0, stdev = 1, min = -Infinity) {
+    const u = 1 - Math.random(); // Converting [0,1) to (0,1]
+    const v = Math.random();
+    const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+    // Transform to the desired mean and standard deviation:
+    let res = z * stdev + mean;
+
+    if (res > min) {
+        return res;
+    } else {
+        return gaussianRandom(mean, stdev, min);
+    }
+}
+
+// Tiny simulation
+let sim_tiny = new Simulation("sim_tiny", 
+    { resolution: 50, fps: 5, steps_pr_frame: 1, meanRefractoryTime: 30});
+sim_tiny.drawAll();
+sim_tiny.animate();
+
+
+// Initialize simulation
+let sim1 = new Simulation("sim1", { resolution: 15 });
+sim1.assignCircle(5, 5, 2, { paceTime: 1000 });
+sim1.assignCircle(20, 25, 7.5, { dead: 1 });
+sim1.assignCircle(30, 25, 4.5, { refractoryTime: 160 });
+sim1.assignCircle(35, 25, 4.5, { refractoryTime: 160 });
 sim1.drawAll();
 sim1.animate();
 
+let sim2 = new Simulation("sim2", { resolution: 5 });
+
+// Update refractory time
+
+noise.seed(Math.random());
+const noiseScale = 30;
+const noiseGain = 60;
+
+for (let i = 0; i < sim2.cols; i++) {
+    for (let j = 0; j < sim2.rows; j++) {
+        const idx = sim2.getCellIndex(i, j);
+
+        const simplexNoise = noise.simplex2(i / noiseScale, j / noiseScale);
+
+        sim2.cellData.refractoryTime[idx] = Math.round(simplexNoise * noiseGain + 110);
+
+    }
+}
+
+sim2.animate();
