@@ -159,7 +159,13 @@ ul.task-list li input[type="checkbox"] {
 <p>Notice, that the activation is not entirely symmetric and predictable. The give the simulation a more organic feel, I added a bit of randomness to the activation of cells. Each cell is activated with a higher probability the more of its four neighbors are active (33% chance if one neighbor is active. 100% change of 3 or 4 neighbors are active).</p>
 <section id="pacemaker-cells" class="level2">
 <h2 class="anchored" data-anchor-id="pacemaker-cells">Pacemaker cells</h2>
-<p>Another interesting property of cardiomyocytes are their ability to</p>
+<p>Another interesting property of cardiomyocytes are their <em>automaticity</em>. Cardiomyocytes spontaneously activate if they are not stimulated by a neighboring cells for a period. Cells in the <em>sinoatrial node</em> in the right atrium have the fastest rate of spontaneous activation, and thus activate the remaining heart. The sinoatrial node is the heart’s pacemaker.</p>
+<p>In the following</p>
+<canvas id="sim_pace" width="400" height="400">
+</canvas>
+<div class="slidecontainer">
+<p><input type="range" min="60" max="1000" value="200" class="slider" id="sim_pace_slider"> <!--<span id="sim_pace_value">800ms</span>--></p>
+</div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="img/Re_entry.svg" class="img-fluid figure-img"></p>

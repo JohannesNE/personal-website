@@ -26,7 +26,15 @@ Notice, that the activation is not entirely symmetric and predictable. The give 
 
 ## Pacemaker cells
 
-Another interesting property of cardiomyocytes are their ability to 
+Another interesting property of cardiomyocytes are their *automaticity*. Cardiomyocytes spontaneously activate if they are not stimulated by a neighboring cells for a period. Cells in the *sinoatrial node* in the right atrium have the fastest rate of spontaneous activation, and thus activate the remaining heart. The sinoatrial node is the heart's pacemaker.
+
+In the following 
+
+<canvas id="sim_pace" width="400" height="400"></canvas>
+<div class="slidecontainer">
+  <input type="range" min="60" max="1000" value="200" class="slider" id="sim_pace_slider">
+  <!--<span id="sim_pace_value">800ms</span>-->
+</div>
 
 
 

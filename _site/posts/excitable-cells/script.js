@@ -27,9 +27,9 @@ class Simulation {
             active: new Uint8Array(cellCount),
             time: new Uint16Array(cellCount),
             refractoryTime: new Uint16Array(cellCount).fill(this.refractoryTime),
-            exciteTime: new Uint8Array(cellCount).fill(10),
-            preexciteTime: new Uint8Array(cellCount).fill(0),
-            paceTime: new Uint8Array(cellCount).fill(0), // zero i no pacing (paceTime is infinite)
+            exciteTime: new Uint16Array(cellCount).fill(10),
+            preexciteTime: new Uint16Array(cellCount).fill(0),
+            paceTime: new Uint16Array(cellCount).fill(0), // zero i no pacing (paceTime is infinite)
             dead: new Uint8Array(cellCount)
         };
     }
@@ -266,9 +266,26 @@ function gaussianRandom(mean = 0, stdev = 1, min = -Infinity) {
 
 // Tiny simulation
 let sim_tiny = new Simulation("sim_tiny", 
-    { resolution: 50, fps: 5, steps_pr_frame: 1, meanRefractoryTime: 30});
+    { resolution: 50, fps: 8, steps_pr_frame: 1, meanRefractoryTime: 30});
 sim_tiny.drawAll();
 sim_tiny.animate();
+
+// Pace simulation
+let sim_pace = new Simulation("sim_pace", 
+    {resolution: 20});
+sim_pace.assignCircle(5, 5, 2, { paceTime: 1000 });
+sim_pace.drawAll();
+sim_pace.animate();
+
+// Setup slider control
+const pace_slider = document.getElementById('sim_pace_slider');
+const pace_value = document.getElementById('sim_pace_value');
+
+pace_slider.addEventListener('input', (e) => {
+    const value = parseInt(e.target.value);
+    pace_value.textContent = `${value}ms`;
+    sim_pace.assignCircle(5, 5, 2, { paceTime: value });
+});
 
 
 // Initialize simulation
@@ -285,8 +302,8 @@ let sim2 = new Simulation("sim2", { resolution: 5 });
 // Update refractory time
 
 noise.seed(Math.random());
-const noiseScale = 30;
-const noiseGain = 60;
+const noiseScale = 20;
+const noiseGain = 80;
 
 for (let i = 0; i < sim2.cols; i++) {
     for (let j = 0; j < sim2.rows; j++) {

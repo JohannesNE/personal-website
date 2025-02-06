@@ -4,9 +4,16 @@
 <body>
     <script src="perlin.js"></script>
 
-    <canvas id="sim_tiny" width="600" height="300"></canvas>
+    <canvas id="sim_tiny" width="600" height="300"></canvas><br>
+
+    <div class="slidecontainer">
+        <input type="range" min="600" max="2000" value="800" class="slider" id="sim_pace_slider">
+        <span id="sim_pace_value">800ms</span>
+    </div>
+    <canvas id="sim_pace" width="400" height="400"></canvas><br>
     <canvas id="sim1" width="600" height="600"></canvas>
-    <canvas id="sim2" width="400" height="400"></canvas>
+    <canvas id="sim2" width="400" height="400"></canvas><br>
+
 
     <script src="script.js"></script>
     
