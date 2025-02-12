@@ -264,43 +264,41 @@ function gaussianRandom(mean = 0, stdev = 1, min = -Infinity) {
     }
 }
 
-// Tiny simulation
+// ## 1. Tiny simulation
 let sim_tiny = new Simulation("sim_tiny", 
     { resolution: 50, fps: 8, steps_pr_frame: 1, meanRefractoryTime: 30});
 sim_tiny.drawAll();
 sim_tiny.animate();
 
-// Pace simulation
+// ## 2. Pace simulation
 let sim_pace = new Simulation("sim_pace", 
     {resolution: 20});
-sim_pace.assignCircle(5, 5, 2, { paceTime: 1000 });
+sim_pace.assignCircle(5, 5, 2, { paceTime: 10000/60 });
 sim_pace.drawAll();
 sim_pace.animate();
 
 // Setup slider control
 const pace_slider = document.getElementById('sim_pace_slider');
-const pace_value = document.getElementById('sim_pace_value');
 
 pace_slider.addEventListener('input', (e) => {
-    const value = parseInt(e.target.value);
-    pace_value.textContent = `${value}ms`;
+    const value = 10000 / parseInt(e.target.value);
     sim_pace.assignCircle(5, 5, 2, { paceTime: value });
 });
 
 
-// Initialize simulation
+// ## 3. Reentry simulation
 let sim1 = new Simulation("sim1", { resolution: 15 });
-sim1.assignCircle(5, 5, 2, { paceTime: 1000 });
+sim1.assignCircle(5, 5, 2, { paceTime: 300 });
 sim1.assignCircle(20, 25, 7.5, { dead: 1 });
 sim1.assignCircle(30, 25, 4.5, { refractoryTime: 160 });
 sim1.assignCircle(35, 25, 4.5, { refractoryTime: 160 });
 sim1.drawAll();
 sim1.animate();
 
+// ## 4. Afib simulation
 let sim2 = new Simulation("sim2", { resolution: 5 });
 
 // Update refractory time
-
 noise.seed(Math.random());
 const noiseScale = 20;
 const noiseGain = 80;

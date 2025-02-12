@@ -18,7 +18,9 @@ The following is a grid of simulated cardiomyocytes. They are all in a *resting 
 
 > 💡 Click/tap somewhere in the box below to activate a cell.
 
+<div class="simcontainer">
 <canvas id="sim_tiny" width="600" height="400"></canvas>
+</div>
 
 Activated cells are black. After a short moment, they become inactive and *refractory*. Refractory cells cannot be activated. In the simulation, refractory cells go from dark gray to light gray, until they have regained their resting state, and are ready for a new activation.
 
@@ -26,20 +28,32 @@ Notice, that the activation is not entirely symmetric and predictable. The give 
 
 ## Pacemaker cells
 
-Another interesting property of cardiomyocytes are their *automaticity*. Cardiomyocytes spontaneously activate if they are not stimulated by a neighboring cells for a period. Cells in the *sinoatrial node* in the right atrium have the fastest rate of spontaneous activation, and thus activate the remaining heart. The sinoatrial node is the heart's pacemaker.
+Another interesting property of cardiomyocytes are their *automaticity*. Cardiomyocytes spontaneously activate if they are not stimulated by a neighboring cells for a period. Cells in the *sinoatrial node* (sinus node) in the right atrium have the fastest rate of spontaneous activation, and thus activate the remaining heart. The sinus node is the heart's pacemaker.
 
-In the following 
+In the following simulation, a cluster of cells in the top, left corner act as pacemaker cells. 
 
-<canvas id="sim_pace" width="400" height="400"></canvas>
-<div class="slidecontainer">
-  <input type="range" min="60" max="1000" value="200" class="slider" id="sim_pace_slider">
-  <!--<span id="sim_pace_value">800ms</span>-->
+> 💡 Move the slider below the simulation to change the rate of spontaneous depolarization (heart rate).
+
+<div class="simcontainer">
+<canvas id="sim_pace" width="600" height="400"></canvas>
+<div class="slidercontainer">
+  <input type="range" min="40" max="100" value="60" class="slider" id="sim_pace_slider">
+</div>
 </div>
 
+When the spontaneous depolarization of the sinus node determines the heart rate, the heart is said to be in [sinus rhythm](https://en.wikipedia.org/wiki/Sinus_rhythm). If the sinus node paces the heart at a rate faster than 100 beats per minute, the rhythm is called [sinus tachycardia](https://en.wikipedia.org/wiki/Sinus_tachycardia). Sinus tachycardia (together with increased stroke volume) increases the flow of blood from the heart, and is the normal (physiological) response to exercise. 
+
+## Reentry tachycardia
+
+In reentry tachycardia, the heart is not paced by the sinus not, but instead from a group of cells that have formed a circuit, where a wave of depolarization can loop around, and stimulate itself over and over. This requires an inert area among the cells (an area that cannot be activated), so a circuit can form around it.
+
+<div class="simcontainer">
+<canvas id="sim_reentry1" width="600" height="400"></canvas>
+</div>
 
 
 ![An illustration of AV-nodal reentry tachycardia. From [ECGpedia.org](https://en.ecgpedia.org/wiki/AVNRT)](img/Re_entry.svg)
 
 I was never entirely sure how d
 
-<canvas id="sim1" width="600" height="600"></canvas>
+<canvas id="sim_reentry2" width="600" height="400"></canvas>

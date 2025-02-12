@@ -25,6 +25,13 @@
     "href": "posts/excitable-cells/index.html#pacemaker-cells",
     "title": "Excitable cells",
     "section": "Pacemaker cells",
-    "text": "Pacemaker cells\nAnother interesting property of cardiomyocytes are their automaticity. Cardiomyocytes spontaneously activate if they are not stimulated by a neighboring cells for a period. Cells in the sinoatrial node in the right atrium have the fastest rate of spontaneous activation, and thus activate the remaining heart. The sinoatrial node is the heart’s pacemaker.\nIn the following\n\n\n\n \n\n\n\n\nAn illustration of AV-nodal reentry tachycardia. From ECGpedia.org\n\n\nI was never entirely sure how d"
+    "text": "Pacemaker cells\nAnother interesting property of cardiomyocytes are their automaticity. Cardiomyocytes spontaneously activate if they are not stimulated by a neighboring cells for a period. Cells in the sinoatrial node in the right atrium have the fastest rate of spontaneous activation, and thus activate the remaining heart. The sinoatrial node is the heart’s pacemaker.\nIn the following simulation, a cluster of cells in the top, left corner act as pacemaker cells.\n\n💡 Move the slider below the simulation to change the rate of spontaneous depolarization (heart rate)."
+  },
+  {
+    "objectID": "posts/excitable-cells/index.html#reentry-arrythmia",
+    "href": "posts/excitable-cells/index.html#reentry-arrythmia",
+    "title": "Excitable cells",
+    "section": "Reentry arrythmia",
+    "text": "Reentry arrythmia\n\n\n\nAn illustration of AV-nodal reentry tachycardia. From ECGpedia.org\n\n\nI was never entirely sure how d"
   }
 ]
