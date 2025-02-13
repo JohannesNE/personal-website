@@ -12,7 +12,7 @@ class Simulation {
         this.steps_pr_frame = options.steps_pr_frame || 5;
 
         // Cell settings
-        this.refractoryTime = options.meanRefractoryTime || 100;
+        this.refractoryTime = options.refractoryTime || 100;
 
         this.setupImageData();
         this.setupGrid();
@@ -22,7 +22,7 @@ class Simulation {
     setupGrid() {
         const cellCount = this.cols * this.rows;
         this.cellData = {
-            state: new Uint8Array(cellCount),
+            state: new Uint8Array(cellCount), // 0: Resting; 1: Active; 2: Refractory;
             nextState: new Uint8Array(cellCount),
             active: new Uint8Array(cellCount),
             time: new Uint16Array(cellCount),
@@ -210,6 +210,17 @@ class Simulation {
 
     }
 
+    defibrilate() {
+        const { active, time, dead } = this.cellData;
+        
+        for (let idx = 0; idx<active.length; idx++) {
+            if (dead[idx] === 0) {
+                active[idx] = 1;
+                time[idx] = 0;
+            }
+        }
+    }
+
     assignCircle(centerI, centerJ, radius, prop) {
         for (let i = Math.floor(centerI - radius); i <= centerI + radius; i++) {
             for (let j = Math.floor(centerJ - radius); j <= centerJ + radius; j++) {
@@ -266,7 +277,7 @@ function gaussianRandom(mean = 0, stdev = 1, min = -Infinity) {
 
 // ## 1. Tiny simulation
 let sim_tiny = new Simulation("sim_tiny", 
-    { resolution: 50, fps: 8, steps_pr_frame: 1, meanRefractoryTime: 30});
+    { resolution: 50, fps: 8, steps_pr_frame: 1, refractoryTime: 30});
 sim_tiny.drawAll();
 sim_tiny.animate();
 
@@ -278,22 +289,47 @@ sim_pace.drawAll();
 sim_pace.animate();
 
 // Setup slider control
-const pace_slider = document.getElementById('sim_pace_slider');
+const slider_pace = document.getElementById("slider_sim_pace");
 
-pace_slider.addEventListener('input', (e) => {
+slider_pace.addEventListener("input", (e) => {
     const value = 10000 / parseInt(e.target.value);
     sim_pace.assignCircle(5, 5, 2, { paceTime: value });
 });
 
+// ## 3. Reentry simulation 1
+let sim_reentry1 = new Simulation("sim_reentry1", { resolution: 20 });
+// Activate cells
+sim_reentry1.assignCircle(10, 1, 2.5, {active: 1, state: 1});
+// Make cells to the right refractory to make depolarization propagate one way only.
+sim_reentry1.assignCircle(20, 5, 5.5, {active: 1, state: 2, time: 50});
+// Dead cells in the middle.
+sim_reentry1.assignCircle(15, 10, 5.5, { dead: 1 });
+// Setup pacemaker in corner
+sim_reentry1.assignCircle(5, 5, 1.5, { paceTime: 250 });
+sim_reentry1.drawAll();
+sim_reentry1.animate();
 
-// ## 3. Reentry simulation
-let sim1 = new Simulation("sim1", { resolution: 15 });
-sim1.assignCircle(5, 5, 2, { paceTime: 300 });
-sim1.assignCircle(20, 25, 7.5, { dead: 1 });
-sim1.assignCircle(30, 25, 4.5, { refractoryTime: 160 });
-sim1.assignCircle(35, 25, 4.5, { refractoryTime: 160 });
-sim1.drawAll();
-sim1.animate();
+// Setup button
+const button_reentry1 = document.getElementById("button_reentry1");
+
+button_reentry1.addEventListener("click", () => {
+    console.log("defibrilate!");
+    sim_reentry1.defibrilate();
+})
+
+
+// ## 4. Reentry simulation 2
+let sim_reentry2 = new Simulation("sim_reentry2", { resolution: 20, refractoryTime: 60});
+sim_reentry2.assignCircle(5, 5, 1.5, { paceTime: 200 });
+sim_reentry2.assignCircle(15, 10, 5.5, { dead: 1 });
+// Make make area with longer refractory time
+sim_reentry2.assignCircle(21, 10, 3.5, { refractoryTime: 130 });
+sim_reentry2.assignCircle(24, 10, 3.5, { refractoryTime: 130 });
+sim_reentry2.assignCircle(27, 10, 3.5, { refractoryTime: 130 });
+sim_reentry2.assignCircle(30, 10, 3.5, { refractoryTime: 130 });
+
+sim_reentry2.drawAll();  
+sim_reentry2.animate();
 
 // ## 4. Afib simulation
 let sim2 = new Simulation("sim2", { resolution: 5 });

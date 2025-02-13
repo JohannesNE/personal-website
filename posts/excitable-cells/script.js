@@ -210,6 +210,17 @@ class Simulation {
 
     }
 
+    defibrilate() {
+        const { active, time, dead } = this.cellData;
+        
+        for (let idx = 0; idx<active.length; idx++) {
+            if (dead[idx] === 0) {
+                active[idx] = 1;
+                time[idx] = 0;
+            }
+        }
+    }
+
     assignCircle(centerI, centerJ, radius, prop) {
         for (let i = Math.floor(centerI - radius); i <= centerI + radius; i++) {
             for (let j = Math.floor(centerJ - radius); j <= centerJ + radius; j++) {
@@ -278,9 +289,9 @@ sim_pace.drawAll();
 sim_pace.animate();
 
 // Setup slider control
-const pace_slider = document.getElementById('sim_pace_slider');
+const slider_pace = document.getElementById("slider_sim_pace");
 
-pace_slider.addEventListener('input', (e) => {
+slider_pace.addEventListener("input", (e) => {
     const value = 10000 / parseInt(e.target.value);
     sim_pace.assignCircle(5, 5, 2, { paceTime: value });
 });
@@ -293,17 +304,30 @@ sim_reentry1.assignCircle(10, 1, 2.5, {active: 1, state: 1});
 sim_reentry1.assignCircle(20, 5, 5.5, {active: 1, state: 2, time: 50});
 // Dead cells in the middle.
 sim_reentry1.assignCircle(15, 10, 5.5, { dead: 1 });
+// Setup pacemaker in corner
+sim_reentry1.assignCircle(3, 3, 1.5, { paceTime: 250 });
 sim_reentry1.drawAll();
 sim_reentry1.animate();
+
+// Setup button
+const button_reentry1 = document.getElementById("button_reentry1");
+
+button_reentry1.addEventListener("click", () => {
+    console.log("defibrilate!");
+    sim_reentry1.defibrilate();
+})
+
 
 // ## 4. Reentry simulation 2
 let sim_reentry2 = new Simulation("sim_reentry2", { resolution: 20, refractoryTime: 60});
 sim_reentry2.assignCircle(5, 5, 1.5, { paceTime: 200 });
 sim_reentry2.assignCircle(15, 10, 5.5, { dead: 1 });
+// Make make area with longer refractory time
 sim_reentry2.assignCircle(21, 10, 3.5, { refractoryTime: 130 });
 sim_reentry2.assignCircle(24, 10, 3.5, { refractoryTime: 130 });
 sim_reentry2.assignCircle(27, 10, 3.5, { refractoryTime: 130 });
 sim_reentry2.assignCircle(30, 10, 3.5, { refractoryTime: 130 });
+
 sim_reentry2.drawAll();  
 sim_reentry2.animate();
 

@@ -25,7 +25,7 @@
     "href": "posts/excitable-cells/index.html#pacemaker-cells",
     "title": "Excitable cells",
     "section": "Pacemaker cells",
-    "text": "Pacemaker cells\nAnother interesting property of cardiomyocytes are their automaticity. Cardiomyocytes spontaneously activate if they are not stimulated by a neighboring cells for a period. Cells in the sinoatrial node in the right atrium have the fastest rate of spontaneous activation, and thus activate the remaining heart. The sinoatrial node is the heart’s pacemaker.\nIn the following simulation, a cluster of cells in the top, left corner act as pacemaker cells.\n\n💡 Move the slider below the simulation to change the rate of spontaneous depolarization (heart rate)."
+    "text": "Pacemaker cells\nAnother interesting property of cardiomyocytes are their automaticity. Cardiomyocytes spontaneously activate if they are not stimulated by a neighboring cells for a period. Cells in the sinoatrial node (sinus node) in the right atrium have the fastest rate of spontaneous activation, and thus activate the remaining heart. The sinus node is the heart’s pacemaker.\nIn the following simulation, a cluster of cells in the top, left corner act as pacemaker cells.\n\n💡 Move the slider below the simulation to change the rate of spontaneous depolarization (heart rate).\n\n\n\n\n\n\n\n\nWhen the spontaneous depolarization of the sinus node determines the heart rate, the heart is said to be in sinus rhythm. If the sinus node paces the heart at a rate faster than 100 beats per minute, the rhythm is called sinus tachycardia. Sinus tachycardia (together with increased stroke volume) increases the flow of blood from the heart, and is the normal (physiological) response to exercise."
   },
   {
     "objectID": "posts/excitable-cells/index.html#reentry-arrythmia",
@@ -33,5 +33,12 @@
     "title": "Excitable cells",
     "section": "Reentry arrythmia",
     "text": "Reentry arrythmia\n\n\n\nAn illustration of AV-nodal reentry tachycardia. From ECGpedia.org\n\n\nI was never entirely sure how d"
+  },
+  {
+    "objectID": "posts/excitable-cells/index.html#reentry-tachycardia",
+    "href": "posts/excitable-cells/index.html#reentry-tachycardia",
+    "title": "Excitable cells",
+    "section": "Reentry tachycardia",
+    "text": "Reentry tachycardia\nIn reentry tachycardia, the heart is not paced by the sinus not, but instead from a group of cells that have formed a circuit, where a wave of depolarization can loop around, and stimulate itself over and over. This requires an non-responsive area among the cells (an area that cannot be activated), so a circuit can form around it.\nIn the simulation below, the red cells are non-responsive (dead). They could represent scar tissue after a mycardial infarction—a common cause of ventricular tachycardia. Or the simulation could illustrate atrial flutter, where a reentrant loop can form around the tricuspid valve.\n\n\n\n ⚡️ Defibrilate!\n\n\n\n\nAn illustration of AV-nodal reentry tachycardia. From ECGpedia.org\n\n\nI was never entirely sure how d"
   }
 ]

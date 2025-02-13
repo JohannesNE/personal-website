@@ -37,7 +37,7 @@ In the following simulation, a cluster of cells in the top, left corner act as p
 <div class="simcontainer">
 <canvas id="sim_pace" width="600" height="400"></canvas>
 <div class="slidercontainer">
-  <input type="range" min="40" max="100" value="60" class="slider" id="sim_pace_slider">
+  <input type="range" min="40" max="100" value="60" class="slider" id="slider_sim_pace">
 </div>
 </div>
 
@@ -45,11 +45,17 @@ When the spontaneous depolarization of the sinus node determines the heart rate,
 
 ## Reentry tachycardia
 
-In reentry tachycardia, the heart is not paced by the sinus not, but instead from a group of cells that have formed a circuit, where a wave of depolarization can loop around, and stimulate itself over and over. This requires an inert area among the cells (an area that cannot be activated), so a circuit can form around it.
+In reentry tachycardia, the heart is not paced by the sinus not, but instead from a group of cells that have formed a circuit, where a wave of depolarization can loop around, and stimulate itself over and over. This requires an non-responsive area among the cells (an area that cannot be activated), so a circuit can form around it.
+
+In the simulation below, the red cells are non-responsive (dead). They could represent scar tissue after a [mycardial infarction](https://en.wikipedia.org/wiki/Myocardial_infarction)---[a common cause of ventricular tachycardia](https://pmc.ncbi.nlm.nih.gov/articles/PMC2744510/). Or the simulation could illustrate [atrial flutter](https://en.wikipedia.org/wiki/Atrial_flutter), where a reentrant loop can form around the tricuspid valve. 
 
 <div class="simcontainer">
 <canvas id="sim_reentry1" width="600" height="400"></canvas>
+<br>
+<button type="button" id="button_reentry1" class="btn btn-primary">⚡️ Defibrilate!</button>
 </div>
+
+
 
 
 ![An illustration of AV-nodal reentry tachycardia. From [ECGpedia.org](https://en.ecgpedia.org/wiki/AVNRT)](img/Re_entry.svg)
