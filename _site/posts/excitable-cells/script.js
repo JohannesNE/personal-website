@@ -210,13 +210,26 @@ class Simulation {
 
     }
 
-    defibrilate() {
+    defibrillate() {
         const { active, time, dead } = this.cellData;
         
         for (let idx = 0; idx<active.length; idx++) {
             if (dead[idx] === 0) {
                 active[idx] = 1;
                 time[idx] = 0;
+            }
+        }
+    }
+
+    setRefractoryNoise(noiseScale, noiseGain) {
+        for (let i = 0; i < this.cols; i++) {
+            for (let j = 0; j < this.rows; j++) {
+                const idx = this.getCellIndex(i, j);
+        
+                const simplexNoise = noise.simplex2(i / noiseScale, j / noiseScale);
+        
+                this.cellData.refractoryTime[idx] = Math.round(((simplexNoise + 1)/2) * noiseGain + 50);
+        
             }
         }
     }
@@ -305,7 +318,7 @@ sim_reentry1.assignCircle(20, 5, 5.5, {active: 1, state: 2, time: 50});
 // Dead cells in the middle.
 sim_reentry1.assignCircle(15, 10, 5.5, { dead: 1 });
 // Setup pacemaker in corner
-sim_reentry1.assignCircle(5, 5, 1.5, { paceTime: 250 });
+sim_reentry1.assignCircle(3, 3, 1.5, { paceTime: 250 });
 sim_reentry1.drawAll();
 sim_reentry1.animate();
 
@@ -313,8 +326,7 @@ sim_reentry1.animate();
 const button_reentry1 = document.getElementById("button_reentry1");
 
 button_reentry1.addEventListener("click", () => {
-    console.log("defibrilate!");
-    sim_reentry1.defibrilate();
+    sim_reentry1.defibrillate();
 })
 
 
@@ -323,31 +335,48 @@ let sim_reentry2 = new Simulation("sim_reentry2", { resolution: 20, refractoryTi
 sim_reentry2.assignCircle(5, 5, 1.5, { paceTime: 200 });
 sim_reentry2.assignCircle(15, 10, 5.5, { dead: 1 });
 // Make make area with longer refractory time
-sim_reentry2.assignCircle(21, 10, 3.5, { refractoryTime: 130 });
-sim_reentry2.assignCircle(24, 10, 3.5, { refractoryTime: 130 });
-sim_reentry2.assignCircle(27, 10, 3.5, { refractoryTime: 130 });
-sim_reentry2.assignCircle(30, 10, 3.5, { refractoryTime: 130 });
+sim_reentry2.assignCircle(5, 15, 8.5, { refractoryTime: 140});
 
 sim_reentry2.drawAll();  
 sim_reentry2.animate();
 
-// ## 4. Afib simulation
-let sim2 = new Simulation("sim2", { resolution: 5 });
+// Setup button
+const button_reentry2 = document.getElementById("button_reentry2");
+
+button_reentry2.addEventListener("click", () => {
+    sim_reentry2.defibrillate();
+})
+
+// ## 5. Afib simulation
+let sim_afib = new Simulation("sim_afib", { resolution: 5 });
 
 // Update refractory time
 noise.seed(Math.random());
 const noiseScale = 20;
-const noiseGain = 80;
+const noiseGain = 40;
 
-for (let i = 0; i < sim2.cols; i++) {
-    for (let j = 0; j < sim2.rows; j++) {
-        const idx = sim2.getCellIndex(i, j);
+sim_afib.setRefractoryNoise(noiseScale, noiseGain);
+sim_afib.assignCircle(1, 1, 2.5, { paceTime: 200 });
 
-        const simplexNoise = noise.simplex2(i / noiseScale, j / noiseScale);
+sim_afib.animate();
 
-        sim2.cellData.refractoryTime[idx] = Math.round(simplexNoise * noiseGain + 110);
+// Setup slider control
+const slider_afib_scale = document.getElementById("slider_afib_scale");
+const slider_afib_gain = document.getElementById("slider_afib_gain");
 
-    }
+function setNoise() {
+    const noiseScale = parseInt(slider_afib_scale.value);
+    const noiseGain = parseInt(slider_afib_gain.value);
+
+    sim_afib.setRefractoryNoise(noiseScale, noiseGain);
 }
 
-sim2.animate();
+slider_afib_scale.addEventListener("input", setNoise);
+slider_afib_gain.addEventListener("input", setNoise);
+
+// Setup button
+const button_afib = document.getElementById("button_afib");
+
+button_afib.addEventListener("click", () => {
+    sim_afib.defibrillate();
+})

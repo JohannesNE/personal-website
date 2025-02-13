@@ -3,20 +3,24 @@ title: 'Excitable cells'
 #date: '2025-01-17'
 #categories: ['physiology']
 description: 'A demonstration of how reentry tachyarrythmias can develop in a system of excitable cells (e.g. cardiomyocytes).'
+image: 'img/article-fig.png'
 execute: 
   message: false
   warning: false
 editor_options: 
   chunk_output_type: console
 include-after-body:
-  text: <script type="application/javascript" src=script.js></script>
+  text: >
+    <script type="application/javascript" src=perlin.js></script>
+    <script type="application/javascript" src=script.js></script>
+
 ---
 
 Heart muscle cells (cardiomyocytes) have some interesting properties. When they are activated, they [depolarize](https://en.wikipedia.org/wiki/Depolarization). Depolarization causes the cell to contract, but also activates neighboring cells.
 
 The following is a grid of simulated cardiomyocytes. They are all in a *resting state*, ready to be *activated*. 
 
-> 💡 Click/tap somewhere in the box below to activate a cell.
+> 👆️ Click/tap somewhere in the box below to activate a cell.
 
 <div class="simcontainer">
 <canvas id="sim_tiny" width="600" height="400"></canvas>
@@ -32,7 +36,7 @@ Another interesting property of cardiomyocytes are their *automaticity*. Cardiom
 
 In the following simulation, a cluster of cells in the top, left corner act as pacemaker cells. 
 
-> 💡 Move the slider below the simulation to change the rate of spontaneous depolarization (heart rate).
+> 👆️ Move the slider below the simulation to change the rate of spontaneous depolarization (heart rate).
 
 <div class="simcontainer">
 <canvas id="sim_pace" width="600" height="400"></canvas>
@@ -47,19 +51,49 @@ When the spontaneous depolarization of the sinus node determines the heart rate,
 
 In reentry tachycardia, the heart is not paced by the sinus not, but instead from a group of cells that have formed a circuit, where a wave of depolarization can loop around, and stimulate itself over and over. This requires an non-responsive area among the cells (an area that cannot be activated), so a circuit can form around it.
 
-In the simulation below, the red cells are non-responsive (dead). They could represent scar tissue after a [mycardial infarction](https://en.wikipedia.org/wiki/Myocardial_infarction)---[a common cause of ventricular tachycardia](https://pmc.ncbi.nlm.nih.gov/articles/PMC2744510/). Or the simulation could illustrate [atrial flutter](https://en.wikipedia.org/wiki/Atrial_flutter), where a reentrant loop can form around the tricuspid valve. 
+In the simulation below, the red cells are non-responsive (dead). They could represent scar tissue after a [myocardial infarction](https://en.wikipedia.org/wiki/Myocardial_infarction)---[a common cause of ventricular tachycardia](https://pmc.ncbi.nlm.nih.gov/articles/PMC2744510/). Or the simulation could illustrate [atrial flutter](https://en.wikipedia.org/wiki/Atrial_flutter), where a reentrant loop can form around the tricuspid valve. 
+
+> 👆️ To stop the reentrant tachycardia, shock the cardiac cells by pressing the "⚡️ Defibrillate!" button. 
 
 <div class="simcontainer">
 <canvas id="sim_reentry1" width="600" height="400"></canvas>
 <br>
-<button type="button" id="button_reentry1" class="btn btn-primary">⚡️ Defibrilate!</button>
+<button type="button" id="button_reentry1" class="btn btn-primary">⚡️ Defibrillate!</button>
 </div>
 
+After defibrillation, the system is in sinus rhythm. The pacemaker cells were always there, but were suppressed by the reentrant loop.
 
+The simulation above illustrates how a reentrant loop can sustain itself around a dead area, but how does it start in the first place.
 
+> 👆️ You can try to click/tap on the simulation above to set of an ectopic beat (a depolarization starting outside the sinus node), but you wont initiate a reentrant loop.
 
-![An illustration of AV-nodal reentry tachycardia. From [ECGpedia.org](https://en.ecgpedia.org/wiki/AVNRT)](img/Re_entry.svg)
+### How does a reentrant loop start?
 
-I was never entirely sure how d
+To initiate a reentrant loop, the wave of depolarization must be traveling only one way around the dead area. Otherwise the two waves traveling in opposite will just eliminate each other when they meet at the other side. However, if one pathway has cells with a **longer refractory period**, a wave of depolarization can arrive exactly when one pathway is ready to depolarize, while the other is still refractory.
 
+In the simulation below, cells in to low left corner has a longer refractory period.
+
+> 👆️ Try initiating an ectopic beat (click/tap) next to the area with a longer refractory period, while the area is still refractory.
+
+<div class="simcontainer">
 <canvas id="sim_reentry2" width="600" height="400"></canvas>
+<br>
+<button type="button" id="button_reentry2" class="btn btn-primary">⚡️ Defibrillate!</button>
+</div>
+
+> 👆️ You can get the system back in sinus rhythm either by ⚡️ defibrillation, or by cleverly timing a new ectopic beat to block the reentrant loop.
+
+## Fibrillation
+
+Another common cardiac arrythmia is fibrillation---atrial fibrillation or ventricular fibrillation. It is also a type of reentrant arrhythmia, but the wave of depolarization does not propagate around a fixed anatomical area, but rather meanders irregularly through the myocardium.
+
+In the simulation below, cells have different refractory periods. 
+
+<div class="simcontainer">
+<canvas id="sim_afib" width="600" height="400"></canvas>
+<div class="slidercontainer">
+  <input type="range" min="10" max="60" value="20" class="slider" id="slider_afib_scale">
+  <input type="range" min="0" max="200" value="40" class="slider" id="slider_afib_gain">
+  <button type="button" id="button_afib" class="btn btn-primary">⚡️ Defibrillate!</button>
+</div>
+</div>
