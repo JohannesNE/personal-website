@@ -7,13 +7,6 @@
     "text": "Excitable cells\n\n\n\n\n\nA demonstration of how reentry tachyarrythmias can develop in a system of excitable cells (e.g. cardiomyocytes).\n\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
-    "objectID": "projects.html",
-    "href": "projects.html",
-    "title": "Projects",
-    "section": "",
-    "text": "Literature Clock - A clock based on excerpts from books\nMelanoma - A web app to train melanoma identification"
-  },
-  {
     "objectID": "posts/excitable-cells/index.html",
     "href": "posts/excitable-cells/index.html",
     "title": "Excitable cells",
@@ -28,13 +21,6 @@
     "text": "Pacemaker cells\nAnother interesting property of cardiomyocytes are their automaticity. Cardiomyocytes spontaneously activate if they are not stimulated by a neighboring cells for a period. Cells in the sinoatrial node (sinus node) in the right atrium have the fastest rate of spontaneous activation, and thus activate the remaining heart. The sinus node is the heart’s pacemaker.\nIn the following simulation, a cluster of cells in the top, left corner act as pacemaker cells.\n\n👆️ Move the slider below the simulation to change the rate of spontaneous depolarization (heart rate).\n\n\n\n\n\n\n\n\nWhen the spontaneous depolarization of the sinus node determines the heart rate, the heart is said to be in sinus rhythm. If the sinus node paces the heart at a rate faster than 100 beats per minute, the rhythm is called sinus tachycardia. Sinus tachycardia (together with increased stroke volume) increases the flow of blood from the heart, and is the normal (physiological) response to exercise."
   },
   {
-    "objectID": "posts/excitable-cells/index.html#reentry-arrythmia",
-    "href": "posts/excitable-cells/index.html#reentry-arrythmia",
-    "title": "Excitable cells",
-    "section": "Reentry arrythmia",
-    "text": "Reentry arrythmia\n\n\n\nAn illustration of AV-nodal reentry tachycardia. From ECGpedia.org\n\n\nI was never entirely sure how d"
-  },
-  {
     "objectID": "posts/excitable-cells/index.html#reentry-tachycardia",
     "href": "posts/excitable-cells/index.html#reentry-tachycardia",
     "title": "Excitable cells",
@@ -46,6 +32,13 @@
     "href": "posts/excitable-cells/index.html#fibrillation",
     "title": "Excitable cells",
     "section": "Fibrillation",
-    "text": "Fibrillation\nAnother common cardiac arrythmia is fibrillation—atrial fibrillation or ventricular fibrillation. It is also a type of reentrant arrhythmia, but the wave of depolarization does not propagate around a fixed anatomical area, but rather meanders irregularly through the myocardium.\nIn the simulation below, cells have different refractory periods.\n\n\n\n\n  ⚡️ Defibrillate!"
+    "text": "Fibrillation\nAnother common cardiac arrythmia is fibrillation—atrial fibrillation or ventricular fibrillation. It is also a type of reentrant arrhythmia, but the wave of depolarization does not propagate around a fixed anatomical area, but rather meanders irregularly through the myocardium.\nIn the simulation below, cells have different refractory times. An ectopic depolarization will activate some cells, while others are still refractory. This can create a quite complex pattern of depolarization, and may create a reentrant loop, without any dead area to loop around.\n\n👆️ Try setting of a few ectopic beats in the simulation below, and see if you can initiate one or more reentrant loops.\n\n💡 Make the system more unstable by changing the scale (with high scale, nearby cells have similar refractory times) and range (overall range of refractory times in the system). High range especially makes the system unstable.\n💡 Depolarize to system to easily see the variation in refractory time.\n\n\n\n\nSet variability in refractory time.\nScale:  Range:  ⚡️ Defibrillate!"
+  },
+  {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "Projects",
+    "section": "",
+    "text": "Literature Clock - A clock based on excerpts from books\nMelanoma - A web app to train melanoma identification"
   }
 ]

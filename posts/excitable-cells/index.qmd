@@ -87,13 +87,22 @@ In the simulation below, cells in to low left corner has a longer refractory per
 
 Another common cardiac arrythmia is fibrillation---atrial fibrillation or ventricular fibrillation. It is also a type of reentrant arrhythmia, but the wave of depolarization does not propagate around a fixed anatomical area, but rather meanders irregularly through the myocardium.
 
-In the simulation below, cells have different refractory periods. 
+In the simulation below, cells have different refractory times. An ectopic depolarization will activate some cells, while others are still refractory. This can create a quite complex pattern of depolarization, and may create a reentrant loop, without any dead area to loop around.
+
+> 👆️ Try setting of a few ectopic beats in the simulation below, and see if you can initiate one or more reentrant loops. 
+
+  💡 Make the system more unstable by changing the **scale** (with high scale, nearby cells have similar refractory times) and **range** (overall range of refractory times in the system). High range especially makes the system unstable.  
+
+  💡 Depolarize to system to easily see the variation in refractory time.
 
 <div class="simcontainer">
 <canvas id="sim_afib" width="600" height="400"></canvas>
 <div class="slidercontainer">
-  <input type="range" min="10" max="60" value="20" class="slider" id="slider_afib_scale">
-  <input type="range" min="0" max="200" value="40" class="slider" id="slider_afib_gain">
-  <button type="button" id="button_afib" class="btn btn-primary">⚡️ Defibrillate!</button>
+
+*Set variability in refractory time.*
+
+**Scale:** <input type="range" min="15" max="80" value="30" class="slider" id="slider_afib_scale">
+**Range:** <input type="range" min="0" max="100" value="30" class="slider" id="slider_afib_percent">
+<button type="button" id="button_afib" class="btn btn-primary">⚡️ Defibrillate!</button>
 </div>
 </div>

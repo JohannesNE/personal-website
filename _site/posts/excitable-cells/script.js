@@ -221,15 +221,17 @@ class Simulation {
         }
     }
 
-    setRefractoryNoise(noiseScale, noiseGain) {
+    setRefractoryNoise(noiseScale, noisePercent) {
         for (let i = 0; i < this.cols; i++) {
             for (let j = 0; j < this.rows; j++) {
                 const idx = this.getCellIndex(i, j);
         
-                const simplexNoise = noise.simplex2(i / noiseScale, j / noiseScale);
+                const simplexNoise = noise.simplex2(i / noiseScale, j / noiseScale) + 1;
+
+                const fullNoise = 80*simplexNoise**2 - 40*simplexNoise + 50;
+                const noiseProp = noisePercent/100.0;
         
-                this.cellData.refractoryTime[idx] = Math.round(((simplexNoise + 1)/2) * noiseGain + 50);
-        
+                this.cellData.refractoryTime[idx] = Math.round(fullNoise*noiseProp + (1-noiseProp) * 150); // Mix no noise (150) and fullNoise
             }
         }
     }
@@ -297,7 +299,7 @@ sim_tiny.animate();
 // ## 2. Pace simulation
 let sim_pace = new Simulation("sim_pace", 
     {resolution: 20});
-sim_pace.assignCircle(5, 5, 2, { paceTime: 10000/60 });
+sim_pace.assignCircle(5, 5, 2, { paceTime: 160, active: 1, state: 1 });
 sim_pace.drawAll();
 sim_pace.animate();
 
@@ -318,7 +320,7 @@ sim_reentry1.assignCircle(20, 5, 5.5, {active: 1, state: 2, time: 50});
 // Dead cells in the middle.
 sim_reentry1.assignCircle(15, 10, 5.5, { dead: 1 });
 // Setup pacemaker in corner
-sim_reentry1.assignCircle(3, 3, 1.5, { paceTime: 250 });
+sim_reentry1.assignCircle(3, 3, 1.5, { paceTime: 250, active: 1, state: 1 });
 sim_reentry1.drawAll();
 sim_reentry1.animate();
 
@@ -332,7 +334,7 @@ button_reentry1.addEventListener("click", () => {
 
 // ## 4. Reentry simulation 2
 let sim_reentry2 = new Simulation("sim_reentry2", { resolution: 20, refractoryTime: 60});
-sim_reentry2.assignCircle(5, 5, 1.5, { paceTime: 200 });
+sim_reentry2.assignCircle(5, 5, 1.5, { paceTime: 200, active: 1, state: 1 });
 sim_reentry2.assignCircle(15, 10, 5.5, { dead: 1 });
 // Make make area with longer refractory time
 sim_reentry2.assignCircle(5, 15, 8.5, { refractoryTime: 140});
@@ -353,26 +355,26 @@ let sim_afib = new Simulation("sim_afib", { resolution: 5 });
 // Update refractory time
 noise.seed(Math.random());
 const noiseScale = 20;
-const noiseGain = 40;
+const noisePercent = 40;
 
-sim_afib.setRefractoryNoise(noiseScale, noiseGain);
-sim_afib.assignCircle(1, 1, 2.5, { paceTime: 200 });
+sim_afib.setRefractoryNoise(noiseScale, noisePercent);
+sim_afib.assignCircle(1, 1, 2.5, { paceTime: 300, active: 1, state: 1 });
 
 sim_afib.animate();
 
 // Setup slider control
 const slider_afib_scale = document.getElementById("slider_afib_scale");
-const slider_afib_gain = document.getElementById("slider_afib_gain");
+const slider_afib_percent = document.getElementById("slider_afib_percent");
 
 function setNoise() {
     const noiseScale = parseInt(slider_afib_scale.value);
-    const noiseGain = parseInt(slider_afib_gain.value);
+    const noisePercent = parseInt(slider_afib_percent.value);
 
-    sim_afib.setRefractoryNoise(noiseScale, noiseGain);
+    sim_afib.setRefractoryNoise(noiseScale, noisePercent);
 }
 
 slider_afib_scale.addEventListener("input", setNoise);
-slider_afib_gain.addEventListener("input", setNoise);
+slider_afib_percent.addEventListener("input", setNoise);
 
 // Setup button
 const button_afib = document.getElementById("button_afib");

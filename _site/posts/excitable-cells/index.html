@@ -212,12 +212,18 @@ ul.task-list li input[type="checkbox"] {
 <section id="fibrillation" class="level2">
 <h2 class="anchored" data-anchor-id="fibrillation">Fibrillation</h2>
 <p>Another common cardiac arrythmia is fibrillation—atrial fibrillation or ventricular fibrillation. It is also a type of reentrant arrhythmia, but the wave of depolarization does not propagate around a fixed anatomical area, but rather meanders irregularly through the myocardium.</p>
-<p>In the simulation below, cells have different refractory periods.</p>
+<p>In the simulation below, cells have different refractory times. An ectopic depolarization will activate some cells, while others are still refractory. This can create a quite complex pattern of depolarization, and may create a reentrant loop, without any dead area to loop around.</p>
+<blockquote class="blockquote">
+<p>👆️ Try setting of a few ectopic beats in the simulation below, and see if you can initiate one or more reentrant loops.</p>
+</blockquote>
+<p>💡 Make the system more unstable by changing the <strong>scale</strong> (with high scale, nearby cells have similar refractory times) and <strong>range</strong> (overall range of refractory times in the system). High range especially makes the system unstable.</p>
+<p>💡 Depolarize to system to easily see the variation in refractory time.</p>
 <div class="simcontainer">
 <canvas id="sim_afib" width="600" height="400">
 </canvas>
 <div class="slidercontainer">
-<p><input type="range" min="10" max="60" value="20" class="slider" id="slider_afib_scale"> <input type="range" min="0" max="200" value="40" class="slider" id="slider_afib_gain"> <button type="button" id="button_afib" class="btn btn-primary">⚡️ Defibrillate!</button></p>
+<p><em>Set variability in refractory time.</em></p>
+<p><strong>Scale:</strong> <input type="range" min="15" max="80" value="30" class="slider" id="slider_afib_scale"> <strong>Range:</strong> <input type="range" min="0" max="100" value="30" class="slider" id="slider_afib_percent"> <button type="button" id="button_afib" class="btn btn-primary">⚡️ Defibrillate!</button></p>
 </div>
 </div>
 
