@@ -1,12 +1,15 @@
 /* css styles */
 
+.simcontainer {
+    width: 100%;
+}
+
 .slidercontainer {
     width: 400px;
+    max-width: 100%;
     padding: 10px 10px 0px 10px;
 }
 
 .slider {
     width: 100%;
-    
-
 }

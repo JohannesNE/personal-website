@@ -25,9 +25,9 @@ format:
     theme: litera
     css: styles.css
     include-in-header: 
-      - text: >
-        <!-- Cloudflare Web Analytics -->
-        <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "68c72ac082624ce1ba03627ceffa8505"}'></script>
-        <!-- End Cloudflare Web Analytics -->
+      - text: |
+          <!-- Cloudflare Web Analytics -->
+          <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "68c72ac082624ce1ba03627ceffa8505"}'></script>
+          <!-- End Cloudflare Web Analytics -->
 
 
