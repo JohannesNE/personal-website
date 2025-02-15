@@ -19,9 +19,15 @@ website:
         href: https://bsky.app/profile/johsenevoldsen.bsky.social
       - text: "{{< iconify fa-brands:orcid >}}"
         url: https://orcid.org/0000-0002-9190-6566/
+
 format:
   html:
     theme: litera
     css: styles.css
+    include-in-header: 
+      - text: >
+        <!-- Cloudflare Web Analytics -->
+        <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "68c72ac082624ce1ba03627ceffa8505"}'></script>
+        <!-- End Cloudflare Web Analytics -->
 
 
