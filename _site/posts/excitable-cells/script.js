@@ -299,7 +299,7 @@ sim_tiny.animate();
 // ## 2. Pace simulation
 let sim_pace = new Simulation("sim_pace", 
     {resolution: 20});
-sim_pace.assignCircle(5, 5, 2, { paceTime: 160, active: 1, state: 1 });
+sim_pace.assignCircle(1, 1, 2.5, { paceTime: 160, active: 1, state: 1 });
 sim_pace.drawAll();
 sim_pace.animate();
 
@@ -320,7 +320,7 @@ sim_reentry1.assignCircle(20, 5, 5.5, {active: 1, state: 2, time: 50});
 // Dead cells in the middle.
 sim_reentry1.assignCircle(15, 10, 5.5, { dead: 1 });
 // Setup pacemaker in corner
-sim_reentry1.assignCircle(3, 3, 1.5, { paceTime: 250, active: 1, state: 1 });
+sim_reentry1.assignCircle(1, 1, 2.5, { paceTime: 250, active: 1, state: 1 });
 sim_reentry1.drawAll();
 sim_reentry1.animate();
 
@@ -334,7 +334,7 @@ button_reentry1.addEventListener("click", () => {
 
 // ## 4. Reentry simulation 2
 let sim_reentry2 = new Simulation("sim_reentry2", { resolution: 20, refractoryTime: 60});
-sim_reentry2.assignCircle(5, 5, 1.5, { paceTime: 200, active: 1, state: 1 });
+sim_reentry2.assignCircle(1, 1, 2.5, { paceTime: 200, active: 1, state: 1 });
 sim_reentry2.assignCircle(15, 10, 5.5, { dead: 1 });
 // Make make area with longer refractory time
 sim_reentry2.assignCircle(5, 15, 8.5, { refractoryTime: 140});
