@@ -1,5 +1,5 @@
 ---
-title: 'Excitable cells'
+title: 'Excitable cells (draft version)'
 #date: '2025-01-17'
 #categories: ['physiology']
 description: 'A demonstration of how reentry tachyarrhythmias can develop in a system of excitable cells.'
@@ -15,8 +15,6 @@ include-after-body:
     <script type="application/javascript" src=script.js></script>
 
 ---
-
-**_Draft version_**
 
 Heart muscle cells (cardiomyocytes) have some interesting properties. When they are activated, they [depolarize](https://en.wikipedia.org/wiki/Depolarization). Depolarization causes the cell to contract, but also activates neighboring cells, setting of a chain reaction.
 
