@@ -3,20 +3,30 @@ class Simulation {
         this.canvas = document.getElementById(canvasID);
         this.ctx = this.canvas.getContext('2d');
 
-        this.resolution = options.resolution || 15;
-        this.cols = Math.floor(this.canvas.width / this.resolution);
-        this.rows = Math.floor(this.canvas.height / this.resolution);
-        this.resolution = this.canvas.width / this.cols;
+        this.cols = options.cols || 40;
+        this.rows = options.rows || 40;
+        this.aspect_ratio = this.cols / this.rows;
 
+        this.resizeCanvas();
+      
         this.fps = options.fps || 20;
         this.steps_pr_frame = options.steps_pr_frame || 5;
 
         // Cell settings
         this.refractoryTime = options.refractoryTime || 100;
 
-        this.setupImageData();
         this.setupGrid();
         this.setupEventListeners();
+    }
+
+    resizeCanvas() {
+        const rect = this.canvas.parentNode.getBoundingClientRect();
+        // Calculate resolution based on cols and parent width
+        this.resolution = Math.floor(rect.width / this.cols);
+        // Set canvas width to be exactly divisible by columns
+        this.canvas.width = this.resolution * this.cols;
+        this.canvas.height = this.canvas.width / this.aspect_ratio;
+        this.setupImageData();
     }
 
     setupGrid() {
@@ -268,6 +278,7 @@ class Simulation {
 
     setupEventListeners() {
         this.canvas.addEventListener('mousedown', (e) => this.handleClick(e));
+        window.addEventListener('resize', () => this.resizeCanvas());
     }
 }
 
@@ -292,13 +303,13 @@ function gaussianRandom(mean = 0, stdev = 1, min = -Infinity) {
 
 // ## 1. Tiny simulation
 let sim_tiny = new Simulation("sim_tiny", 
-    { resolution: 50, fps: 8, steps_pr_frame: 1, refractoryTime: 30});
+    { cols: 15, rows: 15, fps: 8, steps_pr_frame: 1, refractoryTime: 30});
 sim_tiny.drawAll();
 sim_tiny.animate();
 
 // ## 2. Pace simulation
 let sim_pace = new Simulation("sim_pace", 
-    {resolution: 20});
+    {cols: 20, rows: 20});
 sim_pace.assignCircle(1, 1, 2.5, { paceTime: 160, active: 1, state: 1 });
 sim_pace.drawAll();
 sim_pace.animate();
@@ -312,13 +323,13 @@ slider_pace.addEventListener("input", (e) => {
 });
 
 // ## 3. Reentry simulation 1
-let sim_reentry1 = new Simulation("sim_reentry1", { resolution: 20 });
+let sim_reentry1 = new Simulation("sim_reentry1", { cols: 30, rows: 30 });
 // Activate cells
 sim_reentry1.assignCircle(10, 1, 2.5, {active: 1, state: 1});
 // Make cells to the right refractory to make depolarization propagate one way only.
-sim_reentry1.assignCircle(20, 5, 5.5, {active: 1, state: 2, time: 50});
+sim_reentry1.assignCircle(20, 8, 8.5, {active: 1, state: 2, time: 50});
 // Dead cells in the middle.
-sim_reentry1.assignCircle(15, 10, 5.5, { dead: 1 });
+sim_reentry1.assignCircle(15, 15, 5.5, { dead: 1 });
 // Setup pacemaker in corner
 sim_reentry1.assignCircle(1, 1, 2.5, { paceTime: 250, active: 1, state: 1 });
 sim_reentry1.drawAll();
@@ -333,11 +344,11 @@ button_reentry1.addEventListener("click", () => {
 
 
 // ## 4. Reentry simulation 2
-let sim_reentry2 = new Simulation("sim_reentry2", { resolution: 20, refractoryTime: 60});
+let sim_reentry2 = new Simulation("sim_reentry2", { cols: 30, rows: 30, refractoryTime: 60});
 sim_reentry2.assignCircle(1, 1, 2.5, { paceTime: 200, active: 1, state: 1 });
-sim_reentry2.assignCircle(15, 10, 5.5, { dead: 1 });
+sim_reentry2.assignCircle(15, 15, 6.5, { dead: 1 });
 // Make make area with longer refractory time
-sim_reentry2.assignCircle(5, 15, 8.5, { refractoryTime: 140});
+sim_reentry2.assignCircle(5, 20, 10.5, { refractoryTime: 140});
 
 sim_reentry2.drawAll();  
 sim_reentry2.animate();
@@ -350,7 +361,7 @@ button_reentry2.addEventListener("click", () => {
 })
 
 // ## 5. Afib simulation
-let sim_afib = new Simulation("sim_afib", { resolution: 5 });
+let sim_afib = new Simulation("sim_afib", { cols: 80, rows: 80 });
 
 // Update refractory time
 noise.seed(Math.random());

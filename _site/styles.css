@@ -2,7 +2,11 @@
 
 .simcontainer {
     width: 100%;
+    max-width: 500px;
+    margin-bottom: 2em;
 }
+
+
 
 .slidercontainer {
     width: 400px;
