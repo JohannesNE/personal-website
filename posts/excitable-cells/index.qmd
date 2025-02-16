@@ -2,7 +2,7 @@
 title: 'Excitable cells'
 #date: '2025-01-17'
 #categories: ['physiology']
-description: 'A demonstration of how reentry tachyarrythmias can develop in a system of excitable cells (e.g. cardiomyocytes).'
+description: 'A demonstration of how reentry tachyarrhythmias can develop in a system of excitable cells.'
 image: 'img/article-fig.png'
 execute: 
   message: false
@@ -16,7 +16,9 @@ include-after-body:
 
 ---
 
-Heart muscle cells (cardiomyocytes) have some interesting properties. When they are activated, they [depolarize](https://en.wikipedia.org/wiki/Depolarization). Depolarization causes the cell to contract, but also activates neighboring cells.
+**_Draft version_**
+
+Heart muscle cells (cardiomyocytes) have some interesting properties. When they are activated, they [depolarize](https://en.wikipedia.org/wiki/Depolarization). Depolarization causes the cell to contract, but also activates neighboring cells, setting of a chain reaction.
 
 The following is a grid of simulated cardiomyocytes. They are all in a *resting state*, ready to be *activated*. 
 
@@ -28,13 +30,15 @@ The following is a grid of simulated cardiomyocytes. They are all in a *resting 
 
 Activated cells are black. After a short moment, they become inactive and *refractory*. Refractory cells cannot be activated. In the simulation, refractory cells go from dark gray to light gray, until they have regained their resting state, and are ready for a new activation.
 
-Notice, that the activation is not entirely symmetric and predictable. The give the simulation a more organic feel, I added a bit of randomness to the activation of cells. Each cell is activated with a higher probability the more of its four neighbors are active (33% chance if one neighbor is active. 100% change of 3 or 4 neighbors are active).
+Notice, that the activation is not entirely symmetric and predictable. To give the simulation a more organic feel, I added a bit of randomness to the activation of cells. Each cell is activated with a higher probability the more of its four neighbors are active (33% chance if one neighbor is active, 100% chance when 3 or 4 neighbors are active).
 
 ## Pacemaker cells
 
-Another interesting property of cardiomyocytes are their *automaticity*. Cardiomyocytes spontaneously activate if they are not stimulated by a neighboring cells for a period. Cells in the *sinoatrial node* (sinus node) in the right atrium have the fastest rate of spontaneous activation, and thus activate the remaining heart. The sinus node is the heart's pacemaker.
+![Sinus rhythm. From [Ecgpedia](https://ecgpedia.org).](img/sinus.jpg)
 
-In the following simulation, a cluster of cells in the top, left corner act as pacemaker cells. 
+Another interesting property of cardiomyocytes is their *automaticity*; cardiomyocytes spontaneously activate if they are not stimulated by a neighboring cells for a period. Cells in the *sinoatrial node* (sinus node) in the right atrium have the fastest rate of spontaneous activation, and thus activate the remaining heart, making the sinus node the heart's pacemaker.
+
+In the following simulation, a cluster of cells in the top left corner act as pacemaker cells. 
 
 > 👆️ Move the slider below the simulation to change the rate of spontaneous depolarization (heart rate).
 
@@ -49,7 +53,9 @@ When the spontaneous depolarization of the sinus node determines the heart rate,
 
 ## Reentry tachycardia
 
-In reentry tachycardia, the heart is not paced by the sinus not, but instead from a group of cells that have formed a circuit, where a wave of depolarization can loop around, and stimulate itself over and over. This requires an non-responsive area among the cells (an area that cannot be activated), so a circuit can form around it.
+![Ventricular tachycardia. From [Ecgpedia](https://ecgpedia.org).](img/VT.jpeg)
+
+In reentry tachycardia, the heart is not paced by the sinus node, but instead from a group of cells that have formed a circuit, where a wave of depolarization can loop around and stimulate itself over and over. This requires a non-responsive area among the cells (an area that cannot be activated), so a circuit can form around it.
 
 In the simulation below, the red cells are non-responsive (dead). They could represent scar tissue after a [myocardial infarction](https://en.wikipedia.org/wiki/Myocardial_infarction)---[a common cause of ventricular tachycardia](https://pmc.ncbi.nlm.nih.gov/articles/PMC2744510/). Or the simulation could illustrate [atrial flutter](https://en.wikipedia.org/wiki/Atrial_flutter), where a reentrant loop can form around the tricuspid valve. 
 
@@ -63,7 +69,7 @@ In the simulation below, the red cells are non-responsive (dead). They could rep
 
 After defibrillation, the system is in sinus rhythm. The pacemaker cells were always there, but were suppressed by the reentrant loop.
 
-The simulation above illustrates how a reentrant loop can sustain itself around a dead area, but how does it start in the first place.
+The simulation above illustrates how a reentrant loop can sustain itself around a dead area, but how does it start in the first place?
 
 > 👆️ You can try to click/tap on the simulation above to set of an ectopic beat (a depolarization starting outside the sinus node), but you wont initiate a reentrant loop.
 
@@ -71,7 +77,7 @@ The simulation above illustrates how a reentrant loop can sustain itself around 
 
 To initiate a reentrant loop, the wave of depolarization must be traveling only one way around the dead area. Otherwise the two waves traveling in opposite will just eliminate each other when they meet at the other side. However, if one pathway has cells with a **longer refractory period**, a wave of depolarization can arrive exactly when one pathway is ready to depolarize, while the other is still refractory.
 
-In the simulation below, cells in to low left corner has a longer refractory period.
+In the simulation below, cells in the lower left corner have a longer refractory period.
 
 > 👆️ Try initiating an ectopic beat (click/tap) next to the area with a longer refractory period, while the area is still refractory.
 
@@ -85,11 +91,15 @@ In the simulation below, cells in to low left corner has a longer refractory per
 
 ## Fibrillation
 
+![Ventricular fibrillation. From [Ecgpedia](https://ecgpedia.org).](img/Ventricular_Fibrillation.svg)
+
 Another common cardiac arrythmia is fibrillation---atrial fibrillation or ventricular fibrillation. It is also a type of reentrant arrhythmia, but the wave of depolarization does not propagate around a fixed anatomical area, but rather meanders irregularly through the myocardium.
 
 In the simulation below, cells have different refractory times. An ectopic depolarization will activate some cells, while others are still refractory. This can create a quite complex pattern of depolarization, and may create a reentrant loop, without any dead area to loop around.
 
-> 👆️ Try setting of a few ectopic beats in the simulation below, and see if you can initiate one or more reentrant loops. Make the system more unstable by changing the **scale** (with high scale, nearby cells have similar refractory times) and **range** (overall range of refractory times in the system). High range especially makes the system unstable. Depolarize to system to easily see the variation in refractory time.
+> 👆️ Try setting of a few ectopic beats in the simulation below, and see if you can initiate one or more reentrant loops.  
+Make the system more unstable by changing the **scale** (with high scale, nearby cells have similar refractory times) and **range** (overall range of refractory times in the system). **High range** and **low scale** makes the system unstable.  
+Depolarize the system to easily see the variation in refractory time.
 
 <div class="simcontainer">
 <canvas id="sim_afib" width="500" height="500"></canvas>
@@ -102,4 +112,6 @@ In the simulation below, cells have different refractory times. An ectopic depol
 <button type="button" id="button_afib" class="btn btn-primary">⚡️ Defibrillate!</button>
 </div>
 </div>
+
+Stimulating the system while some cells are refractory, while others are not, corresponds to an ectopic beat occurring during the T-wave of an ECG---a high-risk situation for ventricular fibrillation. Also, a high range of refractory times, corresponds to a wide T-wave in the ECG.
 

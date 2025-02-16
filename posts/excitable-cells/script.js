@@ -21,12 +21,19 @@ class Simulation {
 
     resizeCanvas() {
         const rect = this.canvas.parentNode.getBoundingClientRect();
-        // Calculate resolution based on cols and parent width
+        
+        // Calculate new dimensions
         this.resolution = Math.floor(rect.width / this.cols);
-        // Set canvas width to be exactly divisible by columns
-        this.canvas.width = this.resolution * this.cols;
-        this.canvas.height = this.canvas.width / this.aspect_ratio;
-        this.setupImageData();
+        const newWidth = this.resolution * this.cols;
+        const newHeight = newWidth / this.aspect_ratio;
+
+        // Always update in constructor (when no previous dimensions exist)
+        // or when dimensions have actually changed
+        if (!this.imageData || this.canvas.width !== newWidth) {
+            this.canvas.width = newWidth;
+            this.canvas.height = newHeight;
+            this.setupImageData();
+        }
     }
 
     setupGrid() {
