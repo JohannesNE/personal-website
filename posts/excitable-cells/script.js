@@ -413,33 +413,42 @@ function setNoise() {
     sim_afib.setRefractoryNoise(noiseScale, noisePercent);
 }
 
-slider_afib_scale.addEventListener("input", (e) => {
-    sim_afib.showRefractoryTimes = true;
-    sim_afib.paused = true;
-    setNoise();
-});
+function setupSliderEvents(slider) {
+    // Mouse/touch start
+    slider.addEventListener("mousedown", () => {
+        sim_afib.showRefractoryTimes = true;
+        sim_afib.paused = true;
+        setNoise();
+    });
+    
+    slider.addEventListener("touchstart", () => {
+        sim_afib.showRefractoryTimes = true;
+        sim_afib.paused = true;
+        setNoise();
+    });
 
-slider_afib_scale.addEventListener("change", (e) => {
-    setTimeout(() => {
+    // Input for continuous updates
+    slider.addEventListener("input", () => {
+        setNoise();
+    });
+
+    // Mouse/touch end
+    slider.addEventListener("mouseup", () => {
         sim_afib.showRefractoryTimes = false;
         sim_afib.paused = false;
         setNoise();
-    }, 100);
-});
-
-slider_afib_percent.addEventListener("input", (e) => {
-    sim_afib.showRefractoryTimes = true;
-    sim_afib.paused = true;
-    setNoise();
-});
-
-slider_afib_percent.addEventListener("change", (e) => {
-    setTimeout(() => {
+    });
+    
+    slider.addEventListener("touchend", () => {
         sim_afib.showRefractoryTimes = false;
         sim_afib.paused = false;
         setNoise();
-    }, 100);
-});
+    });
+}
+
+// Apply events to both sliders
+setupSliderEvents(slider_afib_scale);
+setupSliderEvents(slider_afib_percent);
 
 // Setup button
 const button_afib = document.getElementById("button_afib");
