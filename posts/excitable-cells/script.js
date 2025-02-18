@@ -414,9 +414,14 @@ function setNoise() {
 }
 
 function setupSliderEvents(slider) {
+    // Prevent default touch behavior
+    slider.style.touchAction = "none";
+
     // Pointer start
-    slider.addEventListener("pointerdown", () => {
+    slider.addEventListener("pointerdown", (e) => {
         console.log("pointerdown");
+        // Capture the pointer to ensure we get all events
+        slider.setPointerCapture(e.pointerId);
         sim_afib.showRefractoryTimes = true;
         sim_afib.paused = true;
         setNoise();
@@ -429,8 +434,18 @@ function setupSliderEvents(slider) {
     });
 
     // Pointer end
-    slider.addEventListener("pointerup", () => {
+    slider.addEventListener("pointerup", (e) => {
         console.log("pointerup");
+        // Release the pointer capture
+        slider.releasePointerCapture(e.pointerId);
+        sim_afib.showRefractoryTimes = false;
+        sim_afib.paused = false;
+        setNoise();
+    });
+
+    // Handle lost capture
+    slider.addEventListener("lostpointercapture", () => {
+        console.log("lostpointercapture");
         sim_afib.showRefractoryTimes = false;
         sim_afib.paused = false;
         setNoise();
