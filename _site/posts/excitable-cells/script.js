@@ -217,6 +217,8 @@ class Simulation {
         if (this.showRefractoryTimes) {
             this.ctx.save();
             this.ctx.globalAlpha = 0.95;
+
+            this.ctx.beginPath();
             for (let i = 0; i < this.cols; i++) {
                 for (let j = 0; j < this.rows; j++) {
                     const idx = this.getCellIndex(i, j);
