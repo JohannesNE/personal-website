@@ -420,29 +420,26 @@ function setNoise() {
 }
 
 function setupSliderEvents(slider) {
-    let hideTimeout;
-
-    function showOverlay() {
-        // Clear any pending hide
-        clearTimeout(hideTimeout);
+    // Pointer start
+    slider.addEventListener("pointerdown", () => {
+        console.log("pointerdown");
         sim_afib.showRefractoryTimes = true;
         sim_afib.paused = true;
-    }
-
-    function hideOverlay() {
-        // Set timeout to hide
-        hideTimeout = setTimeout(() => {
-            sim_afib.showRefractoryTimes = false;
-            sim_afib.paused = false;
-        }, 1000);
-    }
+        setNoise();
+    });
 
     // Input for continuous updates
     slider.addEventListener("input", () => {
         console.log("input");
-        showOverlay();
         setNoise();
-        hideOverlay();
+    });
+
+    // Pointer end
+    slider.addEventListener("pointerup", () => {
+        console.log("pointerup");
+        sim_afib.showRefractoryTimes = false;
+        sim_afib.paused = false;
+        setNoise();
     });
 }
 
