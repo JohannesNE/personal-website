@@ -216,10 +216,7 @@ class Simulation {
             // Clear the canvas first
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             // Draw the base simulation
-            this.ctx.putImageData(this.imageData, 0, 0);
             // Set up overlay drawing
-            this.ctx.globalAlpha = 0.95;
-            this.ctx.globalCompositeOperation = 'source-over';
 
             // Draw overlay in a single batch
             for (let i = 0; i < this.cols; i++) {
