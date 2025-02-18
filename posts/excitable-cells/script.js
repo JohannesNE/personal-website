@@ -414,41 +414,29 @@ function setNoise() {
 }
 
 function setupSliderEvents(slider) {
-    // Prevent default touch behavior
-    slider.style.touchAction = "none";
+    let hideTimeout;
 
-    // Pointer start
-    slider.addEventListener("pointerdown", (e) => {
-        console.log("pointerdown");
-        // Capture the pointer to ensure we get all events
-        slider.setPointerCapture(e.pointerId);
+    function showOverlay() {
+        // Clear any pending hide
+        clearTimeout(hideTimeout);
         sim_afib.showRefractoryTimes = true;
         sim_afib.paused = true;
-        setNoise();
-    });
+    }
+
+    function hideOverlay() {
+        // Set timeout to hide
+        hideTimeout = setTimeout(() => {
+            sim_afib.showRefractoryTimes = false;
+            sim_afib.paused = false;
+        }, 1000);
+    }
 
     // Input for continuous updates
     slider.addEventListener("input", () => {
         console.log("input");
+        showOverlay();
         setNoise();
-    });
-
-    // Pointer end
-    slider.addEventListener("pointerup", (e) => {
-        console.log("pointerup");
-        // Release the pointer capture
-        slider.releasePointerCapture(e.pointerId);
-        sim_afib.showRefractoryTimes = false;
-        sim_afib.paused = false;
-        setNoise();
-    });
-
-    // Handle lost capture
-    slider.addEventListener("lostpointercapture", () => {
-        console.log("lostpointercapture");
-        sim_afib.showRefractoryTimes = false;
-        sim_afib.paused = false;
-        setNoise();
+        hideOverlay();
     });
 }
 
