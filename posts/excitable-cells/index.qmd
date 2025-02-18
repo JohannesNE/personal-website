@@ -114,3 +114,8 @@ Depolarize the system to easily see the variation in refractory time.
 
 Stimulating the system while some cells are refractory, while others are not, corresponds to an ectopic beat occurring during the T-wave of an ECG---a high-risk situation for ventricular fibrillation. Also, a high range of refractory times, corresponds to a wide T-wave in the ECG.
 
+
+## Acknowledgment
+
+This article is inspired by [Bartosz Ciechanowski's](https://ciechanow.ski/) amazing interactive articles. 
+
