@@ -15,6 +15,8 @@ class Simulation {
         // Cell settings
         this.refractoryTime = options.refractoryTime || 100;
 
+        this.paused = false;
+
         this.setupGrid();
         this.setupEventListeners();
     }
@@ -210,12 +212,30 @@ class Simulation {
         }
 
         this.ctx.putImageData(this.imageData, 0, 0);
+
+        // Draw blue overlay for refractory times if slider is being adjusted
+        if (this.showRefractoryTimes) {
+            this.ctx.save();
+            this.ctx.globalAlpha = 0.95;
+            for (let i = 0; i < this.cols; i++) {
+                for (let j = 0; j < this.rows; j++) {
+                    const idx = this.getCellIndex(i, j);
+                    if (!this.cellData.dead[idx]) {
+                        const luminosity = Math.floor(mapValues(this.cellData.refractoryTime[idx], 40, 250, 80, 20));
+                        this.ctx.fillStyle = `hsl(210, 50%, ${luminosity}%)`;
+                        this.ctx.fillRect(i * resolution, j * resolution, resolution, resolution);
+                    }
+                }
+            }
+            this.ctx.restore();
+        }
     }
 
     animate() {
-
-        for (let i = 0; i < this.steps_pr_frame; i++) {
-            this.step();
+        if (!this.paused) {
+            for (let i = 0; i < this.steps_pr_frame; i++) {
+                this.step();
+            }
         }
 
         this.drawAll();
@@ -224,7 +244,6 @@ class Simulation {
         setTimeout(() => {
             requestAnimationFrame(() => this.animate());
         }, 1000 / this.fps);
-
     }
 
     defibrillate() {
@@ -378,6 +397,8 @@ const noisePercent = 40;
 sim_afib.setRefractoryNoise(noiseScale, noisePercent);
 sim_afib.assignCircle(1, 1, 2.5, { paceTime: 300, active: 1, state: 1 });
 
+sim_afib.showRefractoryTimes = false;
+
 sim_afib.animate();
 
 // Setup slider control
@@ -391,8 +412,29 @@ function setNoise() {
     sim_afib.setRefractoryNoise(noiseScale, noisePercent);
 }
 
-slider_afib_scale.addEventListener("input", setNoise);
-slider_afib_percent.addEventListener("input", setNoise);
+slider_afib_scale.addEventListener("input", (e) => {
+    sim_afib.showRefractoryTimes = true;
+    sim_afib.paused = true;
+    setNoise();
+});
+
+slider_afib_scale.addEventListener("change", (e) => {
+    sim_afib.showRefractoryTimes = false;
+    sim_afib.paused = false;
+    setNoise();
+});
+
+slider_afib_percent.addEventListener("input", (e) => {
+    sim_afib.showRefractoryTimes = true;
+    sim_afib.paused = true;
+    setNoise();
+});
+
+slider_afib_percent.addEventListener("change", (e) => {
+    sim_afib.showRefractoryTimes = false;
+    sim_afib.paused = false;
+    setNoise();
+});
 
 // Setup button
 const button_afib = document.getElementById("button_afib");
