@@ -414,14 +414,9 @@ function setNoise() {
 }
 
 function setupSliderEvents(slider) {
-    // Mouse/touch start
-    slider.addEventListener("mousedown", () => {
-        sim_afib.showRefractoryTimes = true;
-        sim_afib.paused = true;
-        setNoise();
-    });
-    
-    slider.addEventListener("touchstart", () => {
+    // Pointer start
+    slider.addEventListener("pointerdown", () => {
+        console.log("pointerdown");
         sim_afib.showRefractoryTimes = true;
         sim_afib.paused = true;
         setNoise();
@@ -429,17 +424,13 @@ function setupSliderEvents(slider) {
 
     // Input for continuous updates
     slider.addEventListener("input", () => {
+        console.log("input");
         setNoise();
     });
 
-    // Mouse/touch end
-    slider.addEventListener("mouseup", () => {
-        sim_afib.showRefractoryTimes = false;
-        sim_afib.paused = false;
-        setNoise();
-    });
-    
-    slider.addEventListener("touchend", () => {
+    // Pointer end
+    slider.addEventListener("pointerup", () => {
+        console.log("pointerup");
         sim_afib.showRefractoryTimes = false;
         sim_afib.paused = false;
         setNoise();
