@@ -1,6 +1,7 @@
 ---
-title: 'Excitable cells (draft version)'
-#date: '2025-01-17'
+title: 'Excitable cells'
+date: '2025-02-18'
+author: 'Johannes Enevoldsen'
 #categories: ['physiology']
 description: 'A demonstration of how reentry tachyarrhythmias can develop in a system of excitable cells.'
 image: 'img/article-fig.png'
