@@ -218,7 +218,6 @@ class Simulation {
             this.ctx.save();
             this.ctx.globalAlpha = 0.95;
 
-            this.ctx.beginPath();
             for (let i = 0; i < this.cols; i++) {
                 for (let j = 0; j < this.rows; j++) {
                     const idx = this.getCellIndex(i, j);
@@ -421,9 +420,11 @@ slider_afib_scale.addEventListener("input", (e) => {
 });
 
 slider_afib_scale.addEventListener("change", (e) => {
-    sim_afib.showRefractoryTimes = false;
-    sim_afib.paused = false;
-    setNoise();
+    setTimeout(() => {
+        sim_afib.showRefractoryTimes = false;
+        sim_afib.paused = false;
+        setNoise();
+    }, 100);
 });
 
 slider_afib_percent.addEventListener("input", (e) => {
@@ -433,9 +434,11 @@ slider_afib_percent.addEventListener("input", (e) => {
 });
 
 slider_afib_percent.addEventListener("change", (e) => {
-    sim_afib.showRefractoryTimes = false;
-    sim_afib.paused = false;
-    setNoise();
+    setTimeout(() => {
+        sim_afib.showRefractoryTimes = false;
+        sim_afib.paused = false;
+        setNoise();
+    }, 100);
 });
 
 // Setup button
