@@ -18,7 +18,7 @@ include-after-body:
 
 ---
 
-I wrote this post to answer some of the questions I had as a medical student, when I first learned about cardiac arrhythmias. Mainly, what are the conditions required to initiate and maintain a state, where the heart muscles are continuously activated independent of the normal pace-making system---a so called *reentrant arrhythmia*. These arrhythmias can be benign, as with [AV-nodal reentry tachycardia (AVNRT)](https://en.wikipedia.org/wiki/AV_nodal_reentrant_tachycardia); a common, and usually harmless, cause of palpitations in young people. Or they can be deadly, as with [ventricular fibrillation](https://en.wikipedia.org/wiki/Ventricular_fibrillation).
+I wrote this post to answer some of the questions, I had as a medical student, when I first learned about cardiac arrhythmias. Mainly, what are the conditions required to initiate and maintain a *reentrant arrhythmia*? That is, a state where the heart muscles are continuously activated by a self-sustaining loop, independent of the normal pace-making system. These arrhythmias can be benign, as with [AV-nodal reentry tachycardia (AVNRT)](https://en.wikipedia.org/wiki/AV_nodal_reentrant_tachycardia); a common, and usually harmless, cause of palpitations in young people. Or they can be deadly, as with [ventricular fibrillation](https://en.wikipedia.org/wiki/Ventricular_fibrillation).
 
 Heart muscle cells (cardiomyocytes) have some interesting properties. When they are activated, they [depolarize](https://en.wikipedia.org/wiki/Depolarization). Depolarization causes the cell to contract, but also activates neighboring cells, setting of a chain reaction. 
 
